@@ -21,16 +21,16 @@ export const getContactList = async (userId) => {
     })
 }
 
-export const userContacts = async (userId) => {
+export const userContacts = async (userId, searchString) => {
     return axiosInstance.get('contacts/all', {
         params: {
-            user_id: userId
+            user_id: userId,
+            search_value: searchString
         }
     })
 }
 
 export const addUserToContact = async (req) => {
-    console.log("req :", req);
     return axiosInstance.post('contacts', {
         ...req
     })
