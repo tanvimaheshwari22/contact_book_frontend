@@ -34,7 +34,7 @@ const AddContactPopover = (prop) => {
     const fetchData = async () => {
         try {
             setIsLoading(true);
-            const response = await getContactList(prop.userId);
+            const response = await getContactList();
             setContactList(response.data.data);
         } catch (error) {
             setErrMsg(error?.response?.data?.msg);
@@ -47,7 +47,6 @@ const AddContactPopover = (prop) => {
         try {
             setIsLoading(true)
             await addUserToContact({
-                user_id: prop.userId,
                 mobile_number: getValues('mobileNumber'),
                 first_name: getValues('firstName'),
                 last_name: getValues('lastName'),

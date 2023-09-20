@@ -17,12 +17,10 @@ const Homepage = () => {
         navigate("/login");
     }
 
-    const user = JSON.parse(localStorage.getItem("user"));
-
     const fetchData = async () => {
         try {
             setIsLoading(true);
-            const response = await userContacts(user.userId, searchValue);
+            const response = await userContacts(searchValue);
             setContactList(response.data.data);
         } catch (err) {
             console.log(err);
@@ -57,7 +55,7 @@ const Homepage = () => {
                             </svg>
                         </li>
                         <li>
-                            <AddContactPopover userId={user.userId} addedContact={contactList} />
+                            <AddContactPopover addedContact={contactList} />
                         </li>
                         <li>
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
