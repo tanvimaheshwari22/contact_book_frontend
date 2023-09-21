@@ -9,13 +9,16 @@ import { useNavigate } from 'react-router'
 const Homepage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [contactList, setContactList] = useState([]);
-    const [searchValue, setSearchValue] = useState(undefined)
+    const [searchValue, setSearchValue] = useState(undefined);
+    const [openProfile, setOpenProfile] = useState(false)
     let navigate = useNavigate();
 
     const onLogout = () => {
         localStorage.clear()
         navigate("/login");
     }
+
+    const user = JSON.parse(localStorage.getItem('user'));
 
     const fetchData = async () => {
         try {
@@ -42,14 +45,14 @@ const Homepage = () => {
         <div className="container">
             <div className='leftside'>
                 <div className='chat-header'>
-                    <div className='user-icon'>
+                    <div className='user-icon' onClick={() => setOpenProfile(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                             <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                         </svg>
                     </div>
                     <div className='header-icon'>
-                        <li>
+                        <li onClick={() => setOpenProfile(false)}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
                                 <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793V2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z" />
                             </svg>
@@ -64,40 +67,55 @@ const Homepage = () => {
                         </li>
                     </div>
                 </div>
-                <div className='search-chat'>
-                    <div>
-                        <input type='text' placeholder='Search or start a new chat' onChange={(e) => setSearchValue(e.target.value)} />
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                        </svg>
-                    </div>
-                </div>
-                <div className='chat-list'>
-                    {contactList.map(contact => {
-                        return (
-                            <div key={contact.contact_user_id} className='block'>
-                                <div className='details'>
-                                    <div className='list'>
-                                        <h4>{contact.first_name} {contact.last_name}</h4>
-                                        {
-                                            contact.status === 'REGISTERED' &&
-                                            <div className='register-contact-display'>{contact.status}</div>
-                                        }
-                                        {
-                                            contact.status === 'INVITED' &&
-                                            <div className='invited-contact-display'>{contact.status}</div>
-                                        }
-
-                                    </div>
-                                    <div className='contact-display'>
-                                        {contact.mobile_number}
-                                    </div>
-                                </div>
+                {!openProfile &&
+                    <div style={{height:"100%"}}>
+                        <div className='search-chat'>
+                            <div>
+                                <input type='text' placeholder='Search or start a new chat' onChange={(e) => setSearchValue(e.target.value)} />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                </svg>
                             </div>
-                        )
-                    }
-                    )}
-                </div>
+                        </div>
+                        <div className='chat-list'>
+                            {contactList.map(contact => {
+                                return (
+                                    <div key={contact.contact_user_id} className='block'>
+                                        <div className='details'>
+                                            <div className='list'>
+                                                <h4>{contact.first_name} {contact.last_name}</h4>
+                                                {
+                                                    contact.status === 'REGISTERED' &&
+                                                    <div className='register-contact-display'>{contact.status}</div>
+                                                }
+                                                {
+                                                    contact.status === 'INVITED' &&
+                                                    <div className='invited-contact-display'>{contact.status}</div>
+                                                }
+
+                                            </div>
+                                            <div className='contact-display'>
+                                                {contact.mobile_number}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                            )}
+                        </div>
+                    </div>
+                }
+                {openProfile &&
+                    <div>
+                        <div className='user-profile'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                            </svg>
+                        </div>
+                        <div className="user-name">{user.name}</div>
+                    </div>}
+
             </div>
             <div className='rightside'>
                 <div className='chat-header'>

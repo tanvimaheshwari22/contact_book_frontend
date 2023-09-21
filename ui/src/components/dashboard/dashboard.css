@@ -67,6 +67,30 @@ body {
     border-radius: 50%;
 }
 
+.user-profile {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: #f6f6f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.user-name {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    background: #f6f6f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+    text-shadow: 0 0 black;
+    font-size: xx-large;
+}
+
 .header-icon {
     display: flex;
 }
@@ -119,9 +143,8 @@ body {
 }
 
 .chat-list {
-    position: relative;
-    height: calc(100% - 110px);
-    overflow-y: auto;
+    height: calc(100% - 110px) !important;
+    overflow-y: scroll;
 }
 
 .chat-list .block {
@@ -149,6 +172,17 @@ body {
 }
 
 .chat-list .block .details .list h4 {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #111;
+}
+
+.setting-bottom {
+    position: absolute;
+    background: #ededed;
+    height: 50px;
+    width: 100%;
+    bottom: 0;
     font-size: 1.1em;
     font-weight: 600;
     color: #111;

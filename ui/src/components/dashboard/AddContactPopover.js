@@ -128,7 +128,7 @@ const AddContactPopover = (prop) => {
                                             isLoading={isLoading}
                                         />
                                     </div>
-                                    <div className="text-center ">
+                                    <div className="text-center">
                                         <a onClick={() => {
                                             setInvite(true)
                                             resetData()
