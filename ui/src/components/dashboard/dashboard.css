@@ -6,6 +6,7 @@
 }
 
 body {
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,7 +45,7 @@ body {
     width: 100%;
     height: 100%;
     background: url(background.png);
-    opacity: 0.6;
+    opacity: 0.05;
 }
 
 .chat-header {
@@ -65,6 +66,20 @@ body {
     height: 40px;
     overflow: hidden;
     border-radius: 50%;
+}
+
+.reciever-details {
+    display: flex;
+    flex-direction: row;
+}
+
+.reciever-details div {
+    padding: 5px 5px;
+}
+
+.reciever-name {
+    color: black;
+    margin-top: 5px;
 }
 
 .user-profile {
@@ -272,4 +287,99 @@ body {
     padding: 10px;
     border-radius: 3px;
     box-shadow: 0 17px 50px 0 rgba(11, 20, 26, .19), 0 12px 15px 0 rgba(11, 20, 26, .24);
+}
+
+.send-disable {
+    pointer-events: none
+}
+
+.chat-box {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 110px);
+    padding: 50px;
+    overflow-y: auto;
+}
+
+.message {
+    position: relative;
+    display: flex;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.message p {
+    font-size: 0.9em;
+    position: relative;
+    right: 0;
+    text-align: right;
+    max-width: 65%;
+    padding: 10px;
+    background: #111;
+    color: #e5ddd5;
+    border-radius: 10px;
+}
+
+.message p::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -12px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #111 0%, #111 50%, transparent 50%, transparent);
+}
+
+.message p span {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.85em;
+    opacity: 0.5;
+}
+
+.my_msg {
+    justify-content: flex-end;
+}
+
+.frnd_msg {
+    justify-content: flex-start;
+}
+
+.frnd_msg p {
+    background-color: #fff;
+    color: black;
+    text-align: left;
+}
+
+.frnd_msg p::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -12px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(225deg, #fff 0%, #fff 50%, transparent 50%, transparent);
+}
+
+.empty-box {
+    background-color: white;
+    position: relative;
+    top: 20%;
+    left: 35%;
+    width: 250px;
+    height: 200px;
+    padding: 10px;
+    border-radius: 3px;
+    box-shadow: 0 17px 50px 0 rgba(11, 20, 26, .19), 0 12px 15px 0 rgba(11, 20, 26, .24);
+}
+
+.empty-box div{
+    margin-top: 30px;
+    text-align: center;
+    text-shadow: 2px 2px 8px black;
+}
+
+.loader{
+    margin-top: 250px;
+    text-align: center;
 }
