@@ -18,7 +18,7 @@ export const getContactList = async () => {
 }
 
 export const userContacts = async (searchString) => {
-    return axiosInstance.get('contacts/all', {
+    return axiosInstance.get('/contacts/all', {
         params: {
             search_value: searchString
         }
@@ -26,7 +26,23 @@ export const userContacts = async (searchString) => {
 }
 
 export const addUserToContact = async (req) => {
-    return axiosInstance.post('contacts', {
+    return axiosInstance.post('/contacts', {
         ...req
+    })
+}
+
+
+export const sendMessgae = async (message, receiverId) => {
+    return axiosInstance.post('/messages/send', {
+        message: message,
+        receiverId: receiverId
+    })
+}
+
+export const getMessages = async (user2Id) => {
+    return axiosInstance.get('/messages', {
+        params: {
+            user2Id: user2Id
+        }
     })
 }
