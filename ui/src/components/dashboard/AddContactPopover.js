@@ -4,7 +4,7 @@ import Popover from 'react-bootstrap/Popover'
 import './dashboard.css'
 import { addUserToContact, getContactList } from "../../service/userSvc";
 import LoaderPage from "../layout/LoadingPage";
-import { phoneRegex } from "../login/RegistrationPage";
+import { emailRegex, phoneRegex } from "../login/RegistrationPage";
 import { useForm } from "react-hook-form";
 import Button from "../layout/button";
 
@@ -22,6 +22,7 @@ const AddContactPopover = (prop) => {
             firstName: '',
             lastName: '',
             mobileNumber: '',
+            email: '',
         }
     });
 
@@ -29,6 +30,7 @@ const AddContactPopover = (prop) => {
         setValue('firstName', '')
         setValue('lastName', '')
         setValue('mobileNumber', '')
+        setValue('email', '')
     }
 
     const fetchData = async () => {
@@ -50,6 +52,7 @@ const AddContactPopover = (prop) => {
                 mobile_number: getValues('mobileNumber'),
                 first_name: getValues('firstName'),
                 last_name: getValues('lastName'),
+                email: getValues('email')
             })
             window.location.reload();
             return
@@ -169,6 +172,32 @@ const AddContactPopover = (prop) => {
                                         {errors.mobileNumber && (
                                             <div className="field-err">
                                                 {errors.mobileNumber.message}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Email Address</label>
+
+                                        <input
+                                            type="email"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            aria-label="Email Address"
+                                            {...register("email", {
+                                                required: true,
+                                                validate: (v) => {
+                                                    if (!emailRegex.test(v)) {
+                                                        return (
+                                                            "Enter Valid Email"
+                                                        );
+                                                    }
+                                                    return true;
+                                                }
+                                            })}
+                                        />
+                                        {errors.email && (
+                                            <div className="field-err">
+                                                {errors.email.message}
                                             </div>
                                         )}
                                     </div>

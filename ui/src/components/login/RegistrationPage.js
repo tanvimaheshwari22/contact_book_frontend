@@ -5,10 +5,13 @@ import { registerUser } from '../../service/userSvc';
 import Button from '../layout/button';
 import './login.css';
 import '../../App.css'
+import ChooseProfile from './ChooseProfile';
 
+export const emailRegex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/
 export const phoneRegex = /^([+]\d{2})?\d{10}$/
 
 const RegistrationPage = () => {
+    const [preview, setPreview] = useState(null)
     const { register, handleSubmit, getValues, formState: { errors },
     } = useForm({
         mode: "onTouched",
@@ -20,6 +23,7 @@ const RegistrationPage = () => {
             firstName: '',
             lastName: '',
             gender: '',
+            picture: ''
         }
     });
 
@@ -37,6 +41,7 @@ const RegistrationPage = () => {
                 first_name: getValues('firstName'),
                 last_name: getValues('lastName'),
                 gender: getValues('gender'),
+                picture: preview
             })
             if (res.data.success) {
                 navigate("/login");
@@ -50,8 +55,6 @@ const RegistrationPage = () => {
         }
     }
 
-    const emailRegex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/
-
     return (
         <div>
             <div className="login-top" />
@@ -60,43 +63,45 @@ const RegistrationPage = () => {
                     <h1>Registration Form</h1>
                 </div>
                 <form autoComplete="on" onSubmit={handleSubmit(onRegister)}>
-                    <div className="form-group">
-                        <label>Mobile Number</label>
-                        <input
-                            type="tel"
-                            className="form-control"
-                            {...register("mobileNumber", {
-                                required: "Phone Number Required",
-                                validate: (v) => {
-                                    if (!phoneRegex.test(v)) {
-                                        return (
-                                            "Enter Valid Phone Number..."
-                                        );
+                    <div className='d-flex flex-row'>
+                        <div className="form-group">
+                            <label>Mobile Number</label>
+                            <input
+                                type="tel"
+                                className="form-control"
+                                {...register("mobileNumber", {
+                                    required: "Phone Number Required",
+                                    validate: (v) => {
+                                        if (!phoneRegex.test(v)) {
+                                            return (
+                                                "Enter Valid Phone Number..."
+                                            );
+                                        }
+                                        return true;
                                     }
-                                    return true;
-                                }
-                            })}
-                        />
-                        {errors.mobileNumber && (
-                            <div className="field-err">
-                                {errors.mobileNumber.message}
-                            </div>
-                        )}
-                    </div>
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            {...register("password", {
-                                required: "Password Required",
-                            })}
-                        />
-                        {errors.password && (
-                            <div className="field-err">
-                                {errors.password.message}
-                            </div>
-                        )}
+                                })}
+                            />
+                            {errors.mobileNumber && (
+                                <div className="field-err">
+                                    {errors.mobileNumber.message}
+                                </div>
+                            )}
+                        </div>
+                        <div className="form-group ms-2">
+                            <label>Password</label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                {...register("password", {
+                                    required: "Password Required",
+                                })}
+                            />
+                            {errors.password && (
+                                <div className="field-err">
+                                    {errors.password.message}
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <div className='d-flex flex-row'>
                         <div className="form-group">
@@ -115,7 +120,7 @@ const RegistrationPage = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="form-group">
+                        <div className="form-group ms-2">
                             <label>Last Name</label>
 
                             <input
@@ -134,54 +139,57 @@ const RegistrationPage = () => {
                             )}
                         </div>
                     </div>
-                    <div className="form-group">
-                        <label>Email Address</label>
+                    <div className='d-flex flex-row'>
+                        <div className="form-group">
+                            <label>Email Address</label>
 
-                        <input
-                            type="email"
-                            className="form-control"
-                            autoComplete="off"
-                            aria-label="Email Address"
-                            {...register("email", {
-                                required: true,
-                                validate: (v) => {
-                                    if (!emailRegex.test(v)) {
-                                        return (
-                                            "Enter Valid Email"
-                                        );
+                            <input
+                                type="email"
+                                className="form-control"
+                                autoComplete="off"
+                                aria-label="Email Address"
+                                {...register("email", {
+                                    required: true,
+                                    validate: (v) => {
+                                        if (!emailRegex.test(v)) {
+                                            return (
+                                                "Enter Valid Email"
+                                            );
+                                        }
+                                        return true;
                                     }
-                                    return true;
-                                }
-                            })}
-                        />
-                        {errors.email && (
-                            <div className="field-err">
-                                {errors.email.message}
-                            </div>
-                        )}
-                    </div>
+                                })}
+                            />
+                            {errors.email && (
+                                <div className="field-err">
+                                    {errors.email.message}
+                                </div>
+                            )}
+                        </div>
 
-                    <div className="form-group">
-                        <label>Gender</label>
-                        <br></br>
-                        <select
-                            className="form-select mb-2"
-                            aria-label="Gender"
-                            {...register("gender", {
-                                required: true,
-                            })}
-                        >
-                            <option defaultValue={""} />
-                            <option value="F">Female</option>
-                            <option value="M">Male</option>
-                        </select>
-                        {errors.gender && (
-                            <div className="field-err">
-                                {errors.gender.message}
-                            </div>
-                        )}
+                        <div className="form-group ms-2" style={{ width: "240px" }}>
+                            <label>Gender</label>
+                            <br></br>
+                            <select
+                                className="form-select mb-2"
+                                aria-label="Gender"
+                                {...register("gender", {
+                                    required: true,
+                                })}
+                            >
+                                <option defaultValue={""} />
+                                <option value="F">Female</option>
+                                <option value="M">Male</option>
+                            </select>
+                            {errors.gender && (
+                                <div className="field-err">
+                                    {errors.gender.message}
+                                </div>
+                            )}
+                        </div>
                     </div>
-                    <div className="text-center pt-1 mb-5 pb-1">
+                    <ChooseProfile preview={preview} setPreview={setPreview} />
+                    <div className="text-center pt-1 pb-1">
                         <Button
                             btnColor="btn-dark"
                             label="Register"
