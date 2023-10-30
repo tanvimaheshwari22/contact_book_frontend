@@ -1,4 +1,4 @@
-import { getGroupMessage, getGroups, getMessages, getUserById, logout, sendGroupMessage, sendMessgae, updateMsgStatus, userContacts } from '../../service/userSvc'
+import { getGroupMessage, getGroups, getMessages, getUserById, logout, sendGroupMessage, sendMessage, updateMsgStatus, uploadAttachment, uploadImage, userContacts } from '../../service/userSvc'
 import LoaderPage from '../layout/LoadingPage'
 import Button from '../layout/button'
 import AddContactPopover from './AddContactPopover'
@@ -27,6 +27,8 @@ const Homepage = () => {
     const [groups, setGroups] = useState([])
     const [currentUser, setCurrentUser] = useState(undefined)
     const [picture, setPicture] = useState(undefined)
+    const [selectDoc, setSelectDoc] = useState(undefined)
+    const [imageData, setImageData] = useState(null);
 
     let navigate = useNavigate();
 
@@ -139,12 +141,38 @@ const Homepage = () => {
         }
     }
 
+    const dataURItoBlob = (dataURI) => {
+        const byteString = atob(dataURI.split(',')[1]);
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: 'image/png' });
+    }
+
     const onSend = async () => {
         try {
             setIsLoading(true)
-            await sendMessgae(message, contact.contact_user_id)
+            const data = new FormData()
+
+            if (selectDoc) {
+                data.append('file', selectDoc)
+                const res = await uploadAttachment(data)
+                await sendMessage(message, contact.contact_user_id, res.data.fileId)
+            } else if (imageData) {
+                const imageBlob = dataURItoBlob(imageData);
+                const currentTimestamp = new Date();
+                data.append('image', imageBlob, `IMG_${currentTimestamp.toLocaleDateString().split("/").join("")}${currentTimestamp.toLocaleTimeString().split(":").join("")}.png`);
+                const res = await uploadImage(data)
+                await sendMessage(message, contact.contact_user_id, res.data.fileId)
+            }
+            else {
+                await sendMessage(message, contact.contact_user_id)
+            }
             fetchMessages(contact.contact_user_id)
             setMessage("")
+            setSelectDoc(undefined)
         } catch (error) {
             console.log(error);
         } finally {
@@ -164,7 +192,6 @@ const Homepage = () => {
             setIsLoading(false)
         }
     }
-    let id = contact
     useEffect(() => {
         fetchData(user.userId);
         ConnectWebSocket();
@@ -280,7 +307,8 @@ const Homepage = () => {
                 <ChatBox message={message} setMessage={setMessage}
                     onSend={onSend} contact={contact} onLogout={onLogout}
                     setChats={setChats} userId={user.userId}
-                    chats={chats} isLoading={isLoading} />
+                    chats={chats} isLoading={isLoading} setSelectDoc={setSelectDoc} selectDoc={selectDoc}
+                    imageData={imageData} setImageData={setImageData} />
             }
             {showGroups &&
                 <GroupChat group={group} isLoading={isLoading}

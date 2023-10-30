@@ -8,7 +8,6 @@ const Messages = (prop) => {
         }
         return false
     }
-
     return (
         <div className='chat-box'>
             {prop.messages.map(m => {
@@ -21,9 +20,16 @@ const Messages = (prop) => {
                                 {m.group_id &&
                                     <p> <span style={{ fontWeight: "bold" }}>{m.first_name}</span> {m.message}<br></br><span>{`${displayTime[0]}:${displayTime[1]}`}</span></p>
                                 }
-                                {
-                                    !m.group_id &&
-                                    <p>{m.message}<br></br><span>{`${displayTime[0]}:${displayTime[1]}`}</span></p>
+                                {!m.group_id &&
+                                    <>
+                                        <p>
+                                            {m.attachment &&
+                                                <>
+                                                    <img src={m.attachment} width="200" height="200" style={{ objectFit: "contain" }} onClick={() => window.open(m.attachment)} />
+                                                    <br></br>
+                                                </>}
+                                            {m.message}<br></br><span>{`${displayTime[0]}:${displayTime[1]}`}</span></p>
+                                    </>
                                 }
                             </div>
 
@@ -34,6 +40,12 @@ const Messages = (prop) => {
                                     <span style={{ fontWeight: "bold" }}>
                                         YOU
                                     </span>
+                                    {m.attachment &&
+                                        <>
+                                            <img src={m.attachment} width="200" height="200" style={{ objectFit: "contain" }} onClick={() => window.open(m.attachment)} />
+                                            <br></br>
+                                        </>
+                                    }
                                     {m.message}
                                     <br></br>
                                     <span>
