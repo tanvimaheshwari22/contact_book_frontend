@@ -41,10 +41,11 @@ export const addUserToContact = async (req) => {
 }
 
 
-export const sendMessgae = async (message, receiverId) => {
+export const sendMessage = async (message, receiverId, fileID) => {
     return axiosInstance.post('/messages/send', {
         message: message,
-        receiverId: receiverId
+        receiverId: receiverId,
+        fileId: fileID
     })
 }
 
@@ -106,4 +107,12 @@ export const updateMsgStatus = async (contactUserID) => {
     return axiosInstance.put("/messages/status", {
         contactUserID: contactUserID
     })
+}
+
+export const uploadAttachment = async (data) => {
+    return axiosInstance.post("/upload", data)
+}
+
+export const uploadImage = async (data) => {
+    return axiosInstance.post("/upload-image", data)
 }
